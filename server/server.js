@@ -1,59 +1,44 @@
 require('./config/config');
 
 const express = require('express');
-const app = express();
+const mongo = require('mongoose');
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
+const colors = require('colors');
+const app = express();
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
-}))
+}));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+//Users Routes
+app.use(require('./routes/usuario'));
 
 //Port Detect
 const port = process.env.PORT || 3000;
 
-//routes
 
-app.get('/usuarios', (req, res) => {
-    res.json('GetUser');
+//DATA BASE
+
+mongo.connect(process.env.URLDB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+}, (err, res) => {
+    
+    if (err) throw colors.red(err);
+
+    console.log('Data Base: ' + 'ONLINE'.green);
+    
 });
-
-app.post('/usuarios', (req, res) => {
-
-    let body = req.body;
-
-    if (body.nombre === undefined || body.email === undefined) {
-        res.status(400).json({
-            ok: false,
-            message: "El nombre y el email son necesarios"
-        })        
-    } else {
-        res.json({
-            User: body
-        });
-    }
-
-});
-
-app.put('/usuarios/:id', (req, res) => { 
-
-    let id = req.id;
-
-    res.json({
-        id
-    });
-});
-
-app.delete('/usuarios', (req, res) => {
-    res.json('DeleteUser');
-});
-
 
 //Listen Port
 app.listen(process.env.PORT, () => {
-    console.log(`Listening port: ${process.env.PORT}`);
+    console.log(`Listening port: ${colors.yellow(process.env.PORT)}`);
 });
