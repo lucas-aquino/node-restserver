@@ -16,14 +16,14 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json());
 
-//Users Routes
-app.use(require('./routes/usuario'));
+// Routes
+app.use(require('./routes/routes'));
 
-//Port Detect
+// Port Detect
 const port = process.env.PORT || 3000;
 
 
-//DATA BASE
+// DATA BASE
 
 mongo.connect(process.env.URLDB, {
     useNewUrlParser: true,
