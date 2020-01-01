@@ -6,6 +6,7 @@ const hbs = require('hbs');
 const bodyParser = require('body-parser');
 const colors = require('colors');
 const app = express();
+const path = require('path');
 
 
 // parse application/x-www-form-urlencoded
@@ -18,6 +19,9 @@ app.use(bodyParser.json());
 
 // Routes
 app.use(require('./routes/routes'));
+
+// Statics
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 // Port Detect
 const port = process.env.PORT || 3000;
